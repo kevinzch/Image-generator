@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.profiles.windows": {
+			"Conda Prompt": {
+			  "path": "C:\\WINDOWS\\System32\\cmd.exe",
+			  "args": [
+				"/K",
+				"C:\\Users\\kevin\\miniconda3\\Scripts\\activate.bat C:\\Users\\kevin\\miniconda3"
+			  ]
+			}
+		},
+		"terminal.integrated.defaultProfile.windows": "Conda Prompt",
+	}
+}
