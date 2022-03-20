@@ -1,5 +1,6 @@
 {
     "Background file path" : "Your/background/file/path",
     "Input folder path" : "Your/input/folder/path",
-    "Output folder path" : "Your/output/folder/path"
+    "Output folder path" : "Your/output/folder/path",
+    "Scale factor" : "4"
 }

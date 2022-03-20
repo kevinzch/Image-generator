@@ -6,9 +6,6 @@ import json
 from os import listdir, path
 from PIL import Image
 
-# Enlarge scale factor
-SCALE_FACTOR = 4
-
 CONFIG_FILE_NAME = 'config.json'
 
 global_file_info_list = []
@@ -17,6 +14,7 @@ class Configuration:
     background_file_path = ''
     input_folder_path = ''
     output_folder_path = ''
+    scale_factor = ''
 
 # Read configurations from config file
 def get_configurations():
@@ -37,6 +35,7 @@ def get_configurations():
         Configuration.background_file_path = tmp_config_dict['Background file path']
         Configuration.input_folder_path = tmp_config_dict['Input folder path']
         Configuration.output_folder_path = tmp_config_dict['Output folder path']
+        Configuration.scale_factor = int(tmp_config_dict['Scale factor'])
 
 # Read files from input folder
 def read_input_images():
@@ -58,16 +57,16 @@ def read_input_images():
 # Generate images
 def generate_images():
     for tmp_file_info_list in global_file_info_list:
-        # Open background
+        # Open background image
         tmp_background = Image.open(Configuration.background_file_path)
 
         # Open input image
         tmp_input_image = Image.open(tmp_file_info_list[1])
 
-        # Enlarge input image to 400%
-        tmp_input_image_resized = tmp_input_image.resize((tmp_input_image.width * SCALE_FACTOR, tmp_input_image.height * SCALE_FACTOR))
+        # Resize input image
+        tmp_input_image_resized = tmp_input_image.resize((tmp_input_image.width * Configuration.scale_factor, tmp_input_image.height * Configuration.scale_factor))
 
-        # Put input image at the center of background
+        # Put input image at the center of background image
         tmp_background.paste(tmp_input_image_resized, (tmp_background.width // 2 - tmp_input_image_resized.width // 2, tmp_background.height // 2 - tmp_input_image_resized.height // 2))
 
         # Save image with input image name
