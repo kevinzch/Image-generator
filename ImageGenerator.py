@@ -11,10 +11,10 @@ SCALE_FACTOR = 4
 
 CONFIG_FILE_NAME = 'config.json'
 
-overlay_image_path_list = []
+global_file_info_list = []
 
 class Configuration:
-    template_file_path = ''
+    background_file_path = ''
     input_folder_path = ''
     output_folder_path = ''
 
@@ -34,40 +34,46 @@ def get_configurations():
     with open(config_file_path, encoding='utf-8') as tmp_config_file:
         tmp_config_dict = json.load(tmp_config_file)
 
-        Configuration.template_file_path = tmp_config_dict['Template file path']
+        Configuration.background_file_path = tmp_config_dict['Background file path']
         Configuration.input_folder_path = tmp_config_dict['Input folder path']
         Configuration.output_folder_path = tmp_config_dict['Output folder path']
 
 # Read files from input folder
-def read_overlay_images():
-    local_overlay_files = listdir(Configuration.input_folder_path)
+def read_input_images():
+    # Get the list of image file names in the input folder
+    local_input_images = listdir(Configuration.input_folder_path)
 
-    for temp_file in local_overlay_files:
-        overlay_image_path_list.append(path.join(Configuration.input_folder_path, temp_file))
+    for temp_input_image in local_input_images:
+        tmp_file_info_list = []
+
+        # Add image file name
+        tmp_file_info_list.append(temp_input_image)
+
+        # Add image file path
+        tmp_file_info_list.append(path.join(Configuration.input_folder_path, temp_input_image))
+
+        # Add image file information to global list: [file name][full file path]
+        global_file_info_list.append(tmp_file_info_list)
 
 # Generate images
 def generate_images():
-    local_cnt = 0
+    for tmp_file_info_list in global_file_info_list:
+        # Open background
+        tmp_background = Image.open(Configuration.background_file_path)
 
-    for temp_path in overlay_image_path_list:
-        # Open template image
-        img_template = Image.open(Configuration.template_file_path)
+        # Open input image
+        tmp_input_image = Image.open(tmp_file_info_list[1])
 
-        # Open overlay image
-        img_overlay = Image.open(temp_path)
+        # Enlarge input image to 400%
+        tmp_input_image_resized = tmp_input_image.resize((tmp_input_image.width * SCALE_FACTOR, tmp_input_image.height * SCALE_FACTOR))
 
-        # Enlarge header to 400%
-        img_overlay_resize = img_overlay.resize((img_overlay.width * SCALE_FACTOR, img_overlay.height * SCALE_FACTOR))
+        # Put input image at the center of background
+        tmp_background.paste(tmp_input_image_resized, (tmp_background.width // 2 - tmp_input_image_resized.width // 2, tmp_background.height // 2 - tmp_input_image_resized.height // 2))
 
-        # Paste header image at the center of template image
-        img_template.paste(img_overlay_resize, (img_template.width // 2 - img_overlay_resize.width // 2, img_template.height // 2 - img_overlay_resize.height // 2))
-
-        # Save image
-        img_template.save(path.join(Configuration.output_folder_path, "image" + str(local_cnt) + ".jpg"))
-
-        local_cnt = local_cnt + 1
+        # Save image with input image name
+        tmp_background.save(path.join(Configuration.output_folder_path, tmp_file_info_list[0]))
 
 if __name__ == "__main__":
     get_configurations()
-    read_overlay_images()
+    read_input_images()
     generate_images()
