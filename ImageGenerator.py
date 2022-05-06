@@ -39,8 +39,8 @@ def get_configurations():
 
 # Read files from input folder
 def read_input_images():
-    # Get the list of image file names in the input folder (list only files)
-    local_input_images = [f for f in listdir(Configuration.input_folder_path) if path.isfile(path.join(Configuration.input_folder_path, f))]
+    # Get the list of image file names in the input folder
+    local_input_images = [f for f in listdir(Configuration.input_folder_path) if '.jpg' in path.join(Configuration.input_folder_path, f)]
 
     for temp_input_image in local_input_images:
         tmp_file_info_list = []
@@ -69,8 +69,8 @@ def generate_images():
         # Put input image at the center of background image
         tmp_background.paste(tmp_input_image_resized, (tmp_background.width // 2 - tmp_input_image_resized.width // 2, tmp_background.height // 2 - tmp_input_image_resized.height // 2))
 
-        # Save image with "Output_" + input image name
-        tmp_background.save(path.join(Configuration.output_folder_path, "Output_" + tmp_file_info_list[0]))
+        # Save image with input image name
+        tmp_background.save(path.join(Configuration.output_folder_path, tmp_file_info_list[0]))
 
 if __name__ == "__main__":
     get_configurations()
