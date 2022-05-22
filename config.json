@@ -4,5 +4,6 @@
     "Output folder path" : "Your/output/folder/path",
     "Scale factor" : "4",
     "Prefix" : "Prefix",
-    "Suffix" : "Suffix"
+    "Suffix" : "Suffix",
+    "Input file exts" : ".jpg,.jfif"
 }

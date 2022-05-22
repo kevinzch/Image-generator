@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from posixpath import split
 import sys
 import json
 from os import listdir, path
@@ -14,6 +13,7 @@ global_file_info_list = []
 class Configuration:
     background_file_path = ''
     input_folder_path = ''
+    input_file_exts = ''
     output_folder_path = ''
     scale_factor = ''
     filename_prefix = ''
@@ -37,15 +37,17 @@ def get_configurations():
 
         Configuration.background_file_path = tmp_config_dict['Background file path']
         Configuration.input_folder_path = tmp_config_dict['Input folder path']
+        Configuration.input_file_exts = list(tmp_config_dict['Input file exts'].split(','))
         Configuration.output_folder_path = tmp_config_dict['Output folder path']
         Configuration.scale_factor = int(tmp_config_dict['Scale factor'])
         Configuration.filename_prefix = tmp_config_dict['Prefix']
         Configuration.filename_suffix = tmp_config_dict['Suffix']
+        
 
 # Read files from input folder
 def read_input_images():
     # Get the list of image file names in the input folder
-    local_input_images = [f for f in listdir(Configuration.input_folder_path) if '.jpg' in f]
+    local_input_images = [f for f in listdir(Configuration.input_folder_path) if path.splitext(f)[1] in Configuration.input_file_exts]
 
     for temp_input_image in local_input_images:
         tmp_file_info_list = []
